@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rujukan Universitas Favorite</title>
+    <style>
+        /* General styling for layout and appearance */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .nav .button {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav .button:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            text-align: left;
+        }
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <header>
+            <h1>Rujukan Universitas Favorite</h1>
+        </header>
+
+        <!-- Navigation links -->
+        <nav class="nav">
+            <a href="index.html" class="button">Home</a>
+            <a href="mata-pelajaran.html" class="button">Rujukan Mata Pelajaran</a>
+            <a href="universitas.html" class="button">Rujukan Universitas</a>
+            <a href="jurusan.html" class="button">Rujukan Jurusan</a>
+        </nav>
+
+        <!-- Content section for data display -->
+        <section class="content">
+            <h2>Data Universitas Favorite</h2>
+            <table id="univTable">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Siswa</th>
+                    <th>NISN</th>
+                    <th>Kelas</th>
+                    <th>Rata-Rata</th>
+                    <th>Pilihan PTN</th>
+                    <th>Jurusan</th>
+                </tr>
+            </table>
+
+            <h3>Summary</h3>
+            <ul id="summaryList"></ul>
+        </section>
+    </div>
+
+    <!-- JavaScript to populate table and summary with JSON data -->
+    <script>
+        // JSON data representing students' university preferences and scores
+        const data = [
+            { "no": 1, "nama": "Brandon Zeko Alexander", "nisn": "0051287066", "kelas": "XII 1", "rata": "93.73", "ptn": "ITB", "jurusan": "STEI-K ITB" },
+            { "no": 2, "nama": "Renza Septia Ahmad", "nisn": "00603743609", "kelas": "XII 1", "rata": "89.49", "ptn": "ITB", "jurusan": "SAPPK ITB" },
+            { "no": 3, "nama": "Muhammad Iqbal Rizqi Alghani", "nisn": "0062647066", "kelas": "XII 4", "rata": "88.47", "ptn": "UNS", "jurusan": "Teknik Elektro UNS" },
+            { "no": 4, "nama": "Wisnutama Chandra Wijaya", "nisn": "0062636074", "kelas": "XI 8", "rata": "88.55", "ptn": "UNPAD", "jurusan": "Ilmu Ekonomi UNPAD" },
+            { "no": 5, "nama": "Kyla Lukita Azzahra", "nisn": "0061348832", "kelas": "XII 2", "rata": "89.90", "ptn": "UNPAD", "jurusan": "Ilmu Kesejahteraan Sosial UNPAD" },
+            { "no": 6, "nama": "Gyzza Primardhya Angseti", "nisn": "0061338068", "kelas": "XII 10", "rata": "89.03", "ptn": "IPB", "jurusan": "Bisnis IPB" },
+            { "no": 7, "nama": "Kanesi Cleo Kinanti", "nisn": "0065918901", "kelas": "XI 8", "rata": "91.86", "ptn": "ITB", "jurusan": "STEL-R ITB" },
+            { "no": 8, "nama": "Aji Khairul Rizal", "nisn": "0065236068", "kelas": "XII 8", "rata": "88.77", "ptn": "ITB", "jurusan": "FTSL ITB" },
+            { "no": 9, "nama": "Albert Jhonatan Wellson Sinaga", "nisn": "0066740570", "kelas": "XII 3", "rata": "92.75", "ptn": "ITB", "jurusan": "FTI SP ITB" },
+            { "no": 10, "nama": "Kyla Khansa Prasista", "nisn": "0076055888", "kelas": "XII 3", "rata": "89.45", "ptn": "UI", "jurusan": "Arsitektur UI" }
+            // Add more rows here as needed
+        ];
+
+        // JavaScript function to render data in the table
+        function renderTable(data) {
+            const table = document.getElementById('univTable');
+            const summary = { ITB: 0, UI: 0, IPB: 0, UNPAD: 0, UNS: 0 };
+
+            data.forEach(item => {
+                // Create table row and populate it with data
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.no}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.nisn}</td>
+                    <td>${item.kelas}</td>
+                    <td>${item.rata}</td>
+                    <td>${item.ptn}</td>
+                    <td>${item.jurusan}</td>
+                `;
+                table.appendChild(row);
+
+                // Count occurrences for summary
+                if (summary[item.ptn] !== undefined) {
+                    summary[item.ptn]++;
+                }
+            });
+
+            // Render summary section
+            const summaryList = document.getElementById('summaryList');
+            for (const [univ, count] of Object.entries(summary)) {
+                const li = document.createElement('li');
+                li.textContent = `${univ}: ${count}`;
+                summaryList.appendChild(li);
+            }
+        }
+
+        // Call the render function with the data
+        renderTable(data);
+    </script>
+</body>
+</html>
